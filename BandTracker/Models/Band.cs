@@ -137,7 +137,7 @@ namespace BandTracker.Models
         BandBandName = rdr.GetString(1);
         BandGenre = rdr.GetString(2);
       }
-      
+
       Band newBand = new Band(BandBandName, BandGenre, BandId);
       conn.Close();
       if (conn != null)
@@ -145,6 +145,61 @@ namespace BandTracker.Models
         conn.Dispose();
       }
       return newBand;
+    }
+
+    public void AddVenue(Venue newVenue)
+    {
+      MySqlConnection conn = DB.Connection();
+      conn.Open();
+      var cmd = conn.CreateCommand() as MySqlCommand;
+      cmd.CommandText = @"INSERT INTO venues_bands (venue_id, band_id) VALUES (@VenueId, @BandId);";
+
+      MySqlParameter venue_id = new MySqlParameter();
+      venue_id.ParameterName = "@VenueId";
+      venue_id.Value = newVenue.GetId();
+      cmd.Parameters.Add(venue_id);
+
+      MySqlParameter band_id = new MySqlParameter();
+      band_id.ParameterName = "@BandId";
+      band_id.Value = _id;
+      cmd.Parameters.Add(band_id);
+
+      cmd.ExecuteNonQuery();
+      conn.Close();
+      if (conn != null)
+      {
+        conn.Dispose();
+      }
+    }
+
+    public List<Venue> GetVenues()
+    {
+      MySqlConnection conn = DB.Connection();
+      conn.Open();
+      var cmd = conn.CreateCommand() as MySqlCommand;
+      cmd.CommandText = @"SELECT venues.* FROM bands JOIN venues_bands ON (bands.id = venues_bands.band_id) JOIN venues ON (venues_bands.venue_id = venues.id) WHERE bands.id = @BandId;";
+
+      MySqlParameter bandId = new MySqlParameter();
+      bandId.ParameterName = "@BandId";
+      bandId.Value = _id;
+      cmd.Parameters.Add(bandId);
+
+      var rdr = cmd.ExecuteReader() as MySqlDataReader;
+      List<Venue> venues = new List<Venue>{};
+
+      while(rdr.Read())
+      {
+        int venueId = rdr.GetInt32(0);
+        string venueName = rdr.GetString(1);
+        Venue newVenue = new Venue(venueName, venueId);
+        venues.Add(newVenue);
+      }
+      conn.Close();
+      if (conn != null)
+      {
+        conn.Dispose();
+      }
+      return venues;
     }
   }
 }
