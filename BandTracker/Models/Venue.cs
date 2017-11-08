@@ -18,7 +18,7 @@ namespace BandTracker.Models
 
     public override bool Equals(System.Object otherVenue)
     {
-    if (!(otherVenue is Venue))
+      if (!(otherVenue is Venue))
       {
         return false;
       }
@@ -64,7 +64,7 @@ namespace BandTracker.Models
       conn.Close();
       if (conn != null)
       {
-          conn.Dispose();
+        conn.Dispose();
       }
       return allVenues;
     }
@@ -160,8 +160,85 @@ namespace BandTracker.Models
       conn.Close();
       if (conn != null)
       {
-          conn.Dispose();
+        conn.Dispose();
       }
+    }
+
+    public void AddBand(Band newBand)
+    {
+      MySqlConnection conn = DB.Connection();
+      conn.Open();
+      var cmd = conn.CreateCommand() as MySqlCommand;
+      cmd.CommandText = @"INSERT INTO venues_bands (venue_id, band_id) VALUES (@VenueId, @BandId);";
+
+      MySqlParameter author_id = new MySqlParameter();
+      author_id.ParameterName = "@VenueId";
+      author_id.Value = _id;
+      cmd.Parameters.Add(author_id);
+
+      MySqlParameter book_id = new MySqlParameter();
+      book_id.ParameterName = "@BandId";
+      book_id.Value = newBand.GetId();
+      cmd.Parameters.Add(book_id);
+
+      cmd.ExecuteNonQuery();
+      conn.Close();
+      if (conn != null)
+      {
+        conn.Dispose();
+      }
+    }
+
+    public List<Band> GetBands()
+    {
+      MySqlConnection conn = DB.Connection();
+      conn.Open();
+      var cmd = conn.CreateCommand() as MySqlCommand;
+      cmd.CommandText = @"SELECT band_id FROM venues_bands WHERE venue_id = @venueId;";
+
+      MySqlParameter venueIdParameter = new MySqlParameter();
+      venueIdParameter.ParameterName = "@venueId";
+      venueIdParameter.Value = _id;
+      cmd.Parameters.Add(venueIdParameter);
+
+      var rdr = cmd.ExecuteReader() as MySqlDataReader;
+
+      List<int> bandIds = new List<int> {};
+      while(rdr.Read())
+      {
+        int bandId = rdr.GetInt32(0);
+        bandIds.Add(bandId);
+      }
+      rdr.Dispose();
+
+      List<Band> bands = new List<Band> {};
+      foreach (int bandId in bandIds)
+      {
+        var bandQuery = conn.CreateCommand() as MySqlCommand;
+        bandQuery.CommandText = @"SELECT * FROM bands WHERE id = @BandId;";
+
+        MySqlParameter bandIdParameter = new MySqlParameter();
+        bandIdParameter.ParameterName = "@BandId";
+        bandIdParameter.Value = bandId;
+        bandQuery.Parameters.Add(bandIdParameter);
+
+        var bandQueryRdr = bandQuery.ExecuteReader() as MySqlDataReader;
+        while(bandQueryRdr.Read())
+        {
+          int thisBandId = bandQueryRdr.GetInt32(0);
+          string bandBandName = bandQueryRdr.GetString(1);
+          string bandGenre = bandQueryRdr.GetString(2);
+          Band foundBand = new Band(bandBandName, bandGenre, thisBandId);
+          bands.Add(foundBand);
+        }
+        bandQueryRdr.Dispose();
+      }
+      conn.Close();
+      if (conn != null)
+      {
+        conn.Dispose();
+      }
+      return bands;
     }
   }
 }

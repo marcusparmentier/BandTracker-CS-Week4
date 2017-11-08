@@ -17,7 +17,7 @@ namespace BandTracker.Tests
     public void Dispose()
     {
       Venue.DeleteAll();
-      // Band.DeleteAll();
+      Band.DeleteAll();
     }
 
     [TestMethod]
@@ -106,6 +106,48 @@ namespace BandTracker.Tests
 
       //Assert
       Assert.AreEqual(newName, result);
+    }
+
+    [TestMethod]
+    public void AddBand_AddsBandToVenue_BandList()
+    {
+      //Arrange
+      Venue testVenue = new Venue("The Firebird");
+      testVenue.Save();
+
+      Band testBand = new Band("Robinhood", "Grunge");
+      testBand.Save();
+      Band failBand = new Band("Failhood", "Failure");
+
+      //Act
+      testVenue.AddBand(testBand);
+
+      List<Band> result = testVenue.GetBands();
+      List<Band> testList = new List<Band>{testBand};
+
+      //Assert
+      CollectionAssert.AreEqual(testList, result);
+    }
+
+    [TestMethod]
+    public void GetBands_ReturnsAllVenueBands_BandList()
+    {
+      //Arrange
+      Venue testVenue = new Venue("The Firebird");
+      testVenue.Save();
+
+      Band testBand1 = new Band("Robinhood", "Grunge");
+      testBand1.Save();
+
+      Band failBand = new Band("Failhood", "Failure");
+
+      //Act
+      testVenue.AddBand(testBand1);
+      List<Band> result = testVenue.GetBands();
+      List<Band> testList = new List<Band> {testBand1};
+
+      //Assert
+      CollectionAssert.AreEqual(testList, result);
     }
   }
 }
