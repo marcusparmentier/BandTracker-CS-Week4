@@ -113,5 +113,38 @@ namespace BandTracker.Models
         conn.Dispose();
       }
     }
+
+    public static Band Find(int id)
+    {
+      MySqlConnection conn = DB.Connection();
+      conn.Open();
+      var cmd = conn.CreateCommand() as MySqlCommand;
+      cmd.CommandText = @"SELECT * FROM bands WHERE id = (@searchId);";
+
+      MySqlParameter searchId = new MySqlParameter();
+      searchId.ParameterName = "@searchId";
+      searchId.Value = id;
+      cmd.Parameters.Add(searchId);
+
+      var rdr = cmd.ExecuteReader() as MySqlDataReader;
+      int BandId = 0;
+      string BandBandName = "";
+      string BandGenre = "";
+
+      while(rdr.Read())
+      {
+        BandId = rdr.GetInt32(0);
+        BandBandName = rdr.GetString(1);
+        BandGenre = rdr.GetString(2);
+      }
+      
+      Band newBand = new Band(BandBandName, BandGenre, BandId);
+      conn.Close();
+      if (conn != null)
+      {
+        conn.Dispose();
+      }
+      return newBand;
+    }
   }
 }
