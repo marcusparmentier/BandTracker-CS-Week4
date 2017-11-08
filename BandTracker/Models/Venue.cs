@@ -16,6 +16,36 @@ namespace BandTracker.Models
       _id = id;
     }
 
+    public override bool Equals(System.Object otherVenue)
+    {
+    if (!(otherVenue is Venue))
+      {
+        return false;
+      }
+      else
+      {
+        Venue newVenue = (Venue) otherVenue;
+        bool idEquality = (this.GetId() == newVenue.GetId());
+        bool venueNameEquality = (this.GetVenueName() == newVenue.GetVenueName());
+        return (idEquality && venueNameEquality);
+      }
+    }
+
+    public override int GetHashCode()
+    {
+      return this.GetVenueName().GetHashCode();
+    }
+
+    public string GetVenueName()
+    {
+      return _venueName;
+    }
+
+    public int GetId()
+    {
+      return _id;
+    }
+
     public static List<Venue> GetAll()
     {
       List<Venue> allVenues = new List<Venue> {};
@@ -37,6 +67,20 @@ namespace BandTracker.Models
           conn.Dispose();
       }
       return allVenues;
+    }
+
+    public static void DeleteAll()
+    {
+      MySqlConnection conn = DB.Connection();
+      conn.Open();
+      var cmd = conn.CreateCommand() as MySqlCommand;
+      cmd.CommandText = @"DELETE FROM venues;";
+      cmd.ExecuteNonQuery();
+      conn.Close();
+      if (conn != null)
+      {
+        conn.Dispose();
+      }
     }
   }
 }
