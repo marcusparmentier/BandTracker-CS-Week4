@@ -40,5 +40,40 @@ namespace BandTracker.Tests
         //Assert
         Assert.AreEqual(firstBand, secondBand);
       }
+
+      [TestMethod]
+      public void Save_SavesBandToDatabase_BandList()
+      {
+        //Arrange
+        Band testBand = new Band("Robinhood","Grunge");
+        testBand.Save();
+        Band failBand = new Band("Failhood","Failure");
+
+        //Act
+        List<Band> result = Band.GetAll();
+        List<Band> testList = new List<Band>{testBand};
+
+        //Assert
+        CollectionAssert.AreEqual(testList, result);
+      }
+
+
+     [TestMethod]
+     public void Save_DatabaseAssignsIdToBand_Id()
+     {
+       //Arrange
+       Band testBand = new Band("Robinhood","Grunge");
+       testBand.Save();
+       Band failBand = new Band("Failhood","Failure");
+
+       //Act
+       Band savedBand = Band.GetAll()[0];
+
+       int result = savedBand.GetId();
+       int testId = testBand.GetId();
+
+       //Assert
+       Assert.AreEqual(testId, result);
+    }
   }
 }

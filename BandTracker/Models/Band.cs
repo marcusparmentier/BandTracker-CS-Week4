@@ -86,5 +86,32 @@ namespace BandTracker.Models
         conn.Dispose();
       }
     }
+
+    public void Save()
+    {
+      MySqlConnection conn = DB.Connection();
+      conn.Open();
+
+      var cmd = conn.CreateCommand() as MySqlCommand;
+      cmd.CommandText = @"INSERT INTO bands (band_name, genre) VALUES (@bandName, @genre);";
+
+      MySqlParameter bandName = new MySqlParameter();
+      bandName.ParameterName = "@bandName";
+      bandName.Value = this._bandName;
+      cmd.Parameters.Add(bandName);
+
+      MySqlParameter genre = new MySqlParameter();
+      genre.ParameterName = "@genre";
+      genre.Value = this._genre;
+      cmd.Parameters.Add(genre);
+
+      cmd.ExecuteNonQuery();
+      _id = (int) cmd.LastInsertedId;
+      conn.Close();
+      if (conn != null)
+      {
+        conn.Dispose();
+      }
+    }
   }
 }
