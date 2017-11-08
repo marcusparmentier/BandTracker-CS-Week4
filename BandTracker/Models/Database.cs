@@ -2,7 +2,7 @@ using System;
 using MySql.Data.MySqlClient;
 using BandTracker;
 
-namespace HairSalon.Models
+namespace BandTracker.Models
 {
   public class DB
   {
