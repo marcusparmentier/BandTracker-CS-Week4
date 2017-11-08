@@ -89,5 +89,23 @@ namespace BandTracker.Tests
       //Assert
       Assert.AreEqual(testVenue, foundVenue);
     }
+
+    [TestMethod]
+    public void Update_UpdatesVenueInDatabase_String()
+    {
+      //Arrange
+      Venue testVenue = new Venue("The Firebird");
+      testVenue.Save();
+      string newName = "Scottrade Center";
+      // string failName = "United Center";
+
+      //Act
+      testVenue.UpdateVenueName(newName);
+
+      string result = Venue.Find(testVenue.GetId()).GetVenueName();
+
+      //Assert
+      Assert.AreEqual(newName, result);
+    }
   }
 }
