@@ -28,5 +28,17 @@ namespace BandTracker.Tests
       //Assert
       Assert.AreEqual(0, result);
     }
+
+    [TestMethod]
+      public void Equals_ReturnsTrueForSameBandNameAndGenre_Band()
+      {
+        //Arrange, Act
+        Band firstBand = new Band("Robinhood","Grunge");
+        Band secondBand = new Band("Robinhood","Grunge");
+        Band failBand = new Band("Failhood","Failure");
+
+        //Assert
+        Assert.AreEqual(firstBand, secondBand);
+      }
   }
 }

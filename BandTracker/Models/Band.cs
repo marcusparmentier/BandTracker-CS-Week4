@@ -17,6 +17,38 @@ namespace BandTracker.Models
       _id = id;
     }
 
+    public override bool Equals(System.Object otherBand)
+    {
+      if (!(otherBand is Band))
+      {
+        return false;
+      }
+      else
+      {
+        Band newBand = (Band) otherBand;
+        bool idEquality = (this.GetId() == newBand.GetId());
+        bool bandNameEquality = (this.GetBandName() == newBand.GetBandName());
+        bool genreEquality = (this.GetGenre() == newBand.GetGenre());
+        return (idEquality && bandNameEquality && genreEquality);
+      }
+    }
+    public override int GetHashCode()
+    {
+      return this.GetId().GetHashCode();
+    }
+    public string GetBandName()
+    {
+      return _bandName;
+    }
+    public string GetGenre()
+    {
+      return _genre;
+    }
+    public int GetId()
+    {
+      return _id;
+    }
+
     public static List<Band> GetAll()
     {
       List<Band> allBands = new List<Band> {};
@@ -28,9 +60,9 @@ namespace BandTracker.Models
       while(rdr.Read())
       {
         int BandId = rdr.GetInt32(0);
-        string BandTitle = rdr.GetString(1);
+        string BandBandName = rdr.GetString(1);
         string BandGenre = rdr.GetString(2);
-        Band newBand = new Band(BandTitle, BandGenre, BandId);
+        Band newBand = new Band(BandBandName, BandGenre, BandId);
         allBands.Add(newBand);
       }
       conn.Close();
