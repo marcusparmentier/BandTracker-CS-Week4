@@ -35,5 +35,27 @@ namespace BandTracker.Controllers
         return View("Success");
     }
 
+    //Venues
+    [HttpGet("/venues")]
+    public ActionResult Venues()
+    {
+        List<Venue> allVenues = Venue.GetAll();
+        return View(allVenues);
+    }
+
+    [HttpGet("/venues/new")]
+    public ActionResult VenueForm()
+    {
+        return View();
+    }
+
+    [HttpPost("/venues/new")]
+    public ActionResult VenueCreate()
+    {
+        Venue newVenue = new Venue(Request.Form["venue-venueName"]);
+        newVenue.Save();
+        return View("Success");
+    }
+
   }
 }
