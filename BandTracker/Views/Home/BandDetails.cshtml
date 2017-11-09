@@ -2,13 +2,12 @@
   Layout = "_Layout";
 }
 
-<h1>Band Tracker</h1>
-<hr />
-<h2>Band: @Model["band"].GetBandName()</h2>
+<h1>@Model["band"].GetBandName()</h1>
+<h4>Genre: @Model["band"].GetGenre()</h4>
 <hr />
 @if (@Model["bandVenues"].Count != 0)
 {
-  <h4>Here are all the venues where this band has prefomed:</h4>
+  <h4>Here are all the Venues where this Band has prefomed:</h4>
   <ul>
     @foreach (var venue in @Model["bandVenues"])
     {
@@ -16,9 +15,11 @@
     }
   </ul>
 }
-<h4>Add a Venue to this band:</h4>
+
+<br>
+<h4>Add a Venue to this Band:</h4>
 <form action='/bands/@Model["band"].GetId()/venues/new' method='post'>
-  <label for='venue-id'>Select an venue</label>
+  <label for='venue-id'>Select an Venue:</label>
   <select id='venue-id' name='venue-id' type='text' required>
     @foreach (var venue in @Model["allVenues"])
     {
@@ -28,5 +29,6 @@
   <button type='submit'>Add</button>
 </form>
 
+<br>
 <h4><a href="/bands">List of Bands</a></h4>
 <h4><a href="/">Return to Home</a></h4>
