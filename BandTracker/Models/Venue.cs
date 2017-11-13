@@ -194,7 +194,10 @@ namespace BandTracker.Models
       MySqlConnection conn = DB.Connection();
       conn.Open();
       var cmd = conn.CreateCommand() as MySqlCommand;
-      cmd.CommandText = @"SELECT band_id FROM venues_bands WHERE venue_id = @venueId;";
+      cmd.CommandText = @"SELECT bands.* FROM venues
+        JOIN venues_bands ON (venues.id = venues_bands.venue_id)
+        JOIN bands ON (venues_bands.band_id = bands.id)
+        WHERE venues.id = @venueId;";
 
       MySqlParameter venueIdParameter = new MySqlParameter();
       venueIdParameter.ParameterName = "@venueId";
@@ -202,36 +205,15 @@ namespace BandTracker.Models
       cmd.Parameters.Add(venueIdParameter);
 
       var rdr = cmd.ExecuteReader() as MySqlDataReader;
+      List<Band> bands = new List<Band> {};
 
-      List<int> bandIds = new List<int> {};
       while(rdr.Read())
       {
         int bandId = rdr.GetInt32(0);
-        bandIds.Add(bandId);
-      }
-      rdr.Dispose();
-
-      List<Band> bands = new List<Band> {};
-      foreach (int bandId in bandIds)
-      {
-        var bandQuery = conn.CreateCommand() as MySqlCommand;
-        bandQuery.CommandText = @"SELECT * FROM bands WHERE id = @BandId;";
-
-        MySqlParameter bandIdParameter = new MySqlParameter();
-        bandIdParameter.ParameterName = "@BandId";
-        bandIdParameter.Value = bandId;
-        bandQuery.Parameters.Add(bandIdParameter);
-
-        var bandQueryRdr = bandQuery.ExecuteReader() as MySqlDataReader;
-        while(bandQueryRdr.Read())
-        {
-          int thisBandId = bandQueryRdr.GetInt32(0);
-          string bandBandName = bandQueryRdr.GetString(1);
-          string bandGenre = bandQueryRdr.GetString(2);
-          Band foundBand = new Band(bandBandName, bandGenre, thisBandId);
-          bands.Add(foundBand);
-        }
-        bandQueryRdr.Dispose();
+        string bandName = rdr.GetString(1);
+        string bandGenre = rdr.GetString(2);
+        Band newBand = new Band(bandName, bandGenre, bandId);
+        bands.Add(newBand);
       }
       conn.Close();
       if (conn != null)
