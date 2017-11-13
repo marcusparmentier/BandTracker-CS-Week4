@@ -1,0 +1,33 @@
+body {
+  background-color: black;
+}
+
+h1 {
+  text-align: center;
+  color: #5d9632;
+}
+
+.well {
+  background-color: #5d9632;
+  color: black;
+  text-align: center;
+  margin: 5%;
+}
+
+a {
+  color: #015887;
+}
+
+li {
+  text-align: left;
+  font-size: 200%;
+}
+
+#genreDetail {
+  color: #5d9632;
+}
+
+hr {
+  border-color: #015887;
+  border-width: thick;
+}

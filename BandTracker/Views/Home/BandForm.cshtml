@@ -5,14 +5,19 @@
 
 <h1>Band Tracker</h1>
 <hr />
-<h3>Add new Band:</h3>
-<br>
-<form action="/bands/new" method="post">
-  <label for="band-bandName">Band Name:</label>
-  <input id="band-bandName" name="band-bandName" type="text" required>
-  <label for="band-genre">Band Genre:</label>
-  <input id="band-genre" name="band-genre" type="text" required>
-  <button type="submit">Add</button>
-</form>
-<br>
-<h4><a href="/">Return to home</a></h4>
+
+<div class="well">
+  <h3>Add new Band:</h3>
+  <br>
+  <form action="/bands/new" method="post">
+    <label for="band-bandName">Band Name:</label>
+    <input id="band-bandName" name="band-bandName" type="text" required>
+    <label for="band-genre">Band Genre:</label>
+    <input id="band-genre" name="band-genre" type="text" required>
+    <button type="submit">Add</button>
+  </form>
+</div>
+
+<div class="well">
+  <h4><a href="/">Return to home</a></h4>
+</div>

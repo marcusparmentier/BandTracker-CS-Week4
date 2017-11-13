@@ -3,32 +3,37 @@
 }
 
 <h1>@Model["band"].GetBandName()</h1>
-<h4>Genre: @Model["band"].GetGenre()</h4>
+<h4 id="genreDetail">Genre: @Model["band"].GetGenre()</h4>
 <hr />
-@if (@Model["bandVenues"].Count != 0)
-{
-  <h4>Here are all the Venues where this Band has prefomed:</h4>
-  <ul>
+
+<div class="well">
+  @if (@Model["bandVenues"].Count != 0)
+  {
+    <h4>Here are all the Venues where this Band has prefomed:</h4>
+    <ul>
     @foreach (var venue in @Model["bandVenues"])
     {
       <li>@venue.GetVenueName()</li>
     }
-  </ul>
-}
+    </ul>
+  }
+</div>
 
-<br>
-<h4>Add a Venue to this Band:</h4>
-<form action='/bands/@Model["band"].GetId()/venues/new' method='post'>
-  <label for='venue-id'>Select an Venue:</label>
-  <select id='venue-id' name='venue-id' type='text' required>
-    @foreach (var venue in @Model["allVenues"])
-    {
-      <option value='@venue.GetId()'>@venue.GetVenueName()</option>
-    }
-  </select>
-  <button type='submit'>Add</button>
-</form>
+<div class="well">
+  <h4>Add a Venue to this Band:</h4>
+  <form action='/bands/@Model["band"].GetId()/venues/new' method='post'>
+    <label for='venue-id'>Select an Venue:</label>
+    <select id='venue-id' name='venue-id' type='text' required>
+      @foreach (var venue in @Model["allVenues"])
+      {
+        <option value='@venue.GetId()'>@venue.GetVenueName()</option>
+      }
+    </select>
+    <button type='submit'>Add</button>
+  </form>
+</div>
 
-<br>
-<h4><a href="/bands">List of Bands</a></h4>
-<h4><a href="/">Return to Home</a></h4>
+<div class="well">
+  <h4><a href="/bands">List of Bands</a></h4>
+  <h4><a href="/">Return to Home</a></h4>
+</div>
