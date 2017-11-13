@@ -118,5 +118,13 @@ namespace BandTracker.Controllers
       return View("Success");
     }
 
+    [HttpGet("/venues/{id}/delete")]
+    public ActionResult VenueDeleteSuccess(int id)
+    {
+      Venue thisVenue = Venue.Find(id);
+      thisVenue.DeleteVenue();
+      return RedirectToAction("Venues");
+    }
+
   }
 }

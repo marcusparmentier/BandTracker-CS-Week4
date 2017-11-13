@@ -223,7 +223,7 @@ namespace BandTracker.Models
       return bands;
     }
 
-    public void Delete()
+    public void DeleteVenue()
     {
       MySqlConnection conn = DB.Connection();
       conn.Open();
