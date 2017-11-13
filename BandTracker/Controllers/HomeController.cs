@@ -103,5 +103,20 @@ namespace BandTracker.Controllers
       return View("Success");
     }
 
+    [HttpGet("venues/{id}/update")]
+    public ActionResult VenueUpdate(int id)
+    {
+      Venue thisVenue = Venue.Find(id);
+      return View(thisVenue);
+    }
+
+    [HttpPost("venues/{id}/update/success")]
+    public ActionResult VenueUpdateSuccess(int id)
+    {
+      Venue thisVenue = Venue.Find(id);
+      thisVenue.UpdateVenueName(Request.Form["new-venueName"]);
+      return View("Success");
+    }
+
   }
 }
